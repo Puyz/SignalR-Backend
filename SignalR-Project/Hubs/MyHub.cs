@@ -4,7 +4,7 @@ namespace SignalR_Project.Hubs;
 
 public class MyHub : Hub
 {
-    private static List<string> clients = new();
+    private static List<string> clients = new(); // conntectionId Array
 
 	public async Task SendMessageAsync(string message)
 	{

@@ -19,7 +19,7 @@ public class MyHub : Hub
     }
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        clients.Remove(Context.ConnectionId);//
+        clients.Remove(Context.ConnectionId);
         await Clients.All.SendAsync("clients", clients);
         await Clients.All.SendAsync("userDisconnected", Context.ConnectionId);
     }

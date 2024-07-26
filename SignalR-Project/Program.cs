@@ -1,4 +1,5 @@
-﻿using SignalR_Project.Hubs;
+﻿using SignalR_Project.Business;
+using SignalR_Project.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
+
+builder.Services.AddTransient<MyBusiness>();
 
 var app = builder.Build();
 

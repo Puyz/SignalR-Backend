@@ -14,9 +14,13 @@
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="Hubs\" />
+    <None Remove="Business\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Hubs\" />
+    <Folder Include="Business\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

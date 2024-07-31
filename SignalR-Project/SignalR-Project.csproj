@@ -16,11 +16,15 @@
     <None Remove="Hubs\" />
     <None Remove="Business\" />
     <None Remove="Interfaces\" />
+    <None Remove="Models\" />
+    <None Remove="DataSources\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Hubs\" />
     <Folder Include="Business\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Models\" />
+    <Folder Include="DataSources\" />
   </ItemGroup>
 </Project>

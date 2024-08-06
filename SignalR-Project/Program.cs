@@ -1,9 +1,4 @@
-﻿using SignalR_Project.Business;
-using SignalR_Project.Hubs;
-using SignalR_Project.Models;
-using SignalR_Project.Subscription;
-using SignalR_Project.Subscription.Middleware;
-
+﻿
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,11 +10,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 
-builder.Services.AddTransient<MyBusiness>();
-
-// Uygulama boyunca dinleyici olması için singleton belirtiyoruz.
-builder.Services.AddSingleton<DatabaseSubscription<Employee>>();
-builder.Services.AddSingleton<DatabaseSubscription<Sale>>();
 
 var app = builder.Build();
 
@@ -43,14 +33,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseDatabaseSubscription<DatabaseSubscription<Sale>>("Sales");
-app.UseDatabaseSubscription<DatabaseSubscription<Employee>>("Employees");
-
-//app.MapHub<MyHub>("/myhub");
-//app.MapHub<MessageHub>("/messagehub");
-//app.MapHub<ChatHub>("/chathub");
-app.MapHub<SalesHub>("saleshub");
 
 app.Run();
 

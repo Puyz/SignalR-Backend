@@ -12,7 +12,7 @@ namespace SignalR_Project.Controllers
     public class MessagesController : Controller
     {
         [HttpPost]
-        public IActionResult Post(User user)
+        public IActionResult Post([FromBody] User user)
         {
             // eğitim amaçlı olduğu için katmanlar oluşturulmadı.
             ConnectionFactory factory = new()

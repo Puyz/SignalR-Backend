@@ -1,4 +1,6 @@
 ﻿
+using SignalR_Project.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// SignalR
 builder.Services.AddSignalR();
 
 
@@ -33,6 +36,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// MAP HUB
+app.MapHub<MessageHub>("/messagehub");
 
 app.Run();
 

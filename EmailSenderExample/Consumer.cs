@@ -1,4 +1,5 @@
 ﻿using EmailSenderExample.Models;
+using Microsoft.AspNetCore.SignalR.Client;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -9,12 +10,14 @@ namespace EmailSenderExample
     public class Consumer
     {
         private readonly ConnectionFactory factory;
+        private readonly HubConnection hubConnection;
         public Consumer()
         {
             factory = new ConnectionFactory
             {
                 Uri = new Uri("amqps")
             };
+            hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7047/messagehub").WithAutomaticReconnect().Build();
         }
 
 
@@ -31,7 +34,7 @@ namespace EmailSenderExample
             channel.BasicConsume("messageQueue", true, consumer);
 
             //consumer.Received += Consumer_Received;
-            consumer.Received += (s, e) =>
+            consumer.Received += async (s, e) =>
             {
                 // mail işlemleri burada gerçekleştirilecek.
 
@@ -43,6 +46,11 @@ namespace EmailSenderExample
 
                 //EmailSender.SendMail(user.Email, user.Message);
                 Console.WriteLine($"{user.Email}: mail gönderildi.");
+
+
+                await hubConnection.StartAsync();
+                await hubConnection.InvokeAsync("SendMessageAsync", user.Message);
+                await hubConnection.StopAsync();
 
             };
         }

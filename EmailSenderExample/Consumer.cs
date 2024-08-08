@@ -15,7 +15,7 @@ namespace EmailSenderExample
         {
             factory = new ConnectionFactory
             {
-                Uri = new Uri("amqps")
+                Uri = new Uri("amqps://vjcgcjyw:P6xIHsPMCeaHQlssHGMswxD1nJSXfSHo@toad.rmq.cloudamqp.com/vjcgcjyw")
             };
             hubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7047/messagehub").WithAutomaticReconnect().Build();
         }

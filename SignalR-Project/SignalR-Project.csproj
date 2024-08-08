@@ -29,7 +29,4 @@
     <None Remove="DataSources\" />
     <None Remove="Subscription\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 </Project>

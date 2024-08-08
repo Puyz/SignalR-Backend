@@ -1,14 +1,16 @@
 ﻿
 
+using SignalR_Project.Context;
+using SignalR_Project.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<AppDbContext>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -33,6 +35,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHub<ChatHub>("/chat-hub");
 
 app.Run();
 

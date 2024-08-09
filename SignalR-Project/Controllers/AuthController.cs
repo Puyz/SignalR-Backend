@@ -13,16 +13,16 @@ namespace SignalR_Project.Controllers
     {
         // we wrote it here cause it is for edu.
         private readonly AppDbContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webEnvironment;
 
-        public AuthController(AppDbContext context, IHostingEnvironment environment)
+        public AuthController(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
-            _hostingEnvironment = environment;
+            _webEnvironment = environment;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterDto register, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register([FromForm] RegisterDto register, CancellationToken cancellationToken)
         {
             bool isNameExists = await _context.Users.AnyAsync(p => p.Name == register.Name, cancellationToken);
             if (isNameExists)
@@ -30,25 +30,22 @@ namespace SignalR_Project.Controllers
                 return BadRequest(new { Message = "Bu kullanıcı adı daha önce kullanılmış." });
             }
 
-            string folderPath = Path.Combine(_hostingEnvironment.ContentRootPath, "file-storage");
+            string folderPath = Path.Combine(_webEnvironment.ContentRootPath, "file-storage");
             string newFileName = Guid.NewGuid().ToString();
             string fileExtension = Path.GetExtension(register.Avatar.FileName).ToLower();
             string fileFullName = newFileName + fileExtension;
 
             string filePath = "/avatars"; // fileType değerleri filePath içeriyor.
+            filePath = filePath.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             folderPath = Path.Combine(folderPath, filePath);
-
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
 
             using (var stream = new FileStream(Path.Combine(folderPath, fileFullName), FileMode.Create))
             {
                 await register.Avatar.CopyToAsync(stream, cancellationToken);
             }
 
-            User user = new() {
+            User user = new()
+            {
                 Name = register.Name,
                 Avatar = Path.Combine(filePath, fileFullName)
             };
@@ -56,7 +53,7 @@ namespace SignalR_Project.Controllers
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return NoContent();
+            return Ok(user);
         }
 
 
@@ -67,11 +64,11 @@ namespace SignalR_Project.Controllers
 
             if (user == null)
             {
-                return BadRequest(new {Message= "Kullanıcı bulunamadı."});
+                return BadRequest(new { Message = "Kullanıcı bulunamadı." });
             }
 
-            user.Status = "online";
-            await _context.SaveChangesAsync(cancellationToken);
+            //user.Status = "online";
+            //await _context.SaveChangesAsync(cancellationToken);
             return Ok(user);
 
         }

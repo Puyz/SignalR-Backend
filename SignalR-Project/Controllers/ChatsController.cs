@@ -22,6 +22,13 @@ namespace SignalR_Project.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            List<User> users = await _context.Users.OrderBy(p => p.Name).ToListAsync();    
+            return Ok(users);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetChats(Guid userId, Guid toUserId, CancellationToken cancellationToken)
         {
             List<Chat> chatList = await _context.Chats
@@ -50,7 +57,7 @@ namespace SignalR_Project.Controllers
 
             await _hubContext.Clients.Client(connectionId).SendAsync("messages", chat, cancellationToken);
 
-            return Ok();
+            return Ok(chat);
         }
     }
 }
